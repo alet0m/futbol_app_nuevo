@@ -1,0 +1,42 @@
+name: futbol_app
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^3.13.0
+  firebase_messaging: ^15.2.5
+  firebase_auth: ^5.5.2
+  cloud_firestore: ^5.6.6
+  google_fonts: ^6.2.1
+  # Si usas otros paquetes de Firebase, ajusta sus versiones:
+  firebase_storage: ^12.4.5 # solo si lo usas
+  web: ^1.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+  # You can add your assets here if you have any (like images, etc.)
+
+  # Example to add custom fonts (if you plan to use custom fonts)
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic

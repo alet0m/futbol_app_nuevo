@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, avoid_print
+// ignore_for_file: unused_import, avoid_print, use_build_context_synchronously
 import 'scripts/sync_teams_with_users.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';

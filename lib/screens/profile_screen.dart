@@ -1,19 +1,19 @@
-// ignore_for_file: use_build_context_synchronously, deprecated_member_use, use_key_in_widget_constructors, prefer_const_constructors
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use, use_key_in_widget_constructors, prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/rank_data.dart';
+import '../services/friend_service.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  final String profileUid;
+  const ProfileScreen({super.key, required this.profileUid});
 
   Future<Map<String, dynamic>?> _getUserData() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return null;
     final doc = await FirebaseFirestore.instance
         .collection('users')
-        .doc(user.uid)
+        .doc(profileUid)
         .get();
     return doc.data();
   }
@@ -37,11 +37,14 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isOwnProfile =
+        FirebaseAuth.instance.currentUser?.uid == profileUid;
+
     return Scaffold(
       backgroundColor: const Color(0xFF388E3C),
       appBar: AppBar(
         backgroundColor: Colors.green[900],
-        title: const Text('Mi Perfil'),
+        title: Text(isOwnProfile ? 'Mi Perfil' : 'Perfil'),
         centerTitle: true,
       ),
       body: FutureBuilder<Map<String, dynamic>?>(
@@ -217,20 +220,32 @@ class ProfileScreen extends StatelessWidget {
                             'Tarjetas amarillas: ${stats['yellowCards'] ?? 0}'),
                         Text('Tarjetas rojas: ${stats['redCards'] ?? 0}'),
                         const SizedBox(height: 24),
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green[800],
-                            foregroundColor: Colors.white,
+                        if (isOwnProfile)
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green[800],
+                              foregroundColor: Colors.white,
+                            ),
+                            icon: const Icon(Icons.logout),
+                            label: const Text('Cerrar sesión'),
+                            onPressed: () async {
+                              await FirebaseAuth.instance.signOut();
+                              if (context.mounted) {
+                                Navigator.pushReplacementNamed(context, '/login');
+                              }
+                            },
                           ),
-                          icon: const Icon(Icons.logout),
-                          label: const Text('Cerrar sesión'),
-                          onPressed: () async {
-                            await FirebaseAuth.instance.signOut();
-                            if (context.mounted) {
-                              Navigator.pushReplacementNamed(context, '/login');
-                            }
-                          },
-                        ),
+                        if (!isOwnProfile)
+                          ElevatedButton(
+                            onPressed: () {
+                              FriendService.sendFriendRequest(profileUid);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Solicitud enviada')),
+                              );
+                            },
+                            child: const Text('Agregar amigo'),
+                          ),
                       ],
                     ),
                   ),
@@ -265,7 +280,6 @@ class TeamStatsWidget extends StatelessWidget {
           'teamMembers': members.length,
         });
 
-        // Aquí mostramos el nombre del equipo destacado
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8),
           child: Padding(
@@ -322,7 +336,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: _passwordController.text.trim(),
       );
 
-      // Guarda los datos en Firestore
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
@@ -437,7 +450,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextButton(
                   onPressed: () =>
                       Navigator.pushReplacementNamed(context, '/login'),
-                  // ignore: sort_child_properties_last
                   child: const Text('¿Ya tienes cuenta? Inicia sesión'),
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.green[900],
@@ -451,3 +463,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
+

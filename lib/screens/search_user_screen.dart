@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'profile_screen.dart';
-import 'search_user_screen.dart';
 
 class SearchUserScreen extends StatefulWidget {
   const SearchUserScreen({super.key});
@@ -18,7 +17,8 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
   Future<void> _searchUser() async {
     final uid = _uidController.text.trim();
     if (uid.isEmpty) return;
-    final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
     setState(() {
       _searchedUid = doc.exists ? uid : null;
       _notFound = !doc.exists;
@@ -51,22 +51,11 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                 child: ProfileScreen(profileUid: _searchedUid!),
               ),
             if (_notFound)
-              const Text('Usuario no encontrado', style: TextStyle(color: Colors.red)),
+              const Text('Usuario no encontrado',
+                  style: TextStyle(color: Colors.red)),
           ],
         ),
       ),
     );
   }
 }
-
-List<Widget> get _screens => [
-  MatchesScreen(
-    tuEquipoId: selectedMyTeamId,
-    tuEquipoName: selectedMyTeamName,
-  ),
-  TeamsScreen(),
-  SearchUserScreen(), // <--- Agregado aquí
-  ProfileScreen(
-    profileUid: FirebaseAuth.instance.currentUser!.uid,
-  ),
-];

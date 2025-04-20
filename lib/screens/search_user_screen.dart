@@ -22,7 +22,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
   @override
   void initState() {
     super.initState();
-    // saveFcmToken(); // Eliminado porque ya no se usa FCM
+    // saveFcmToken(); // Eliminado porque ya no se usa FCM asas
   }
 
   Future<void> _searchUser() async {
@@ -58,7 +58,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                 labelText: 'UID de usuario',
                 border: OutlineInputBorder(),
               ),
-            ),
+            ),  
             const SizedBox(height: 12),
             ElevatedButton(
               onPressed: _searchUser,

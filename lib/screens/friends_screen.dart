@@ -16,13 +16,17 @@ class FriendsScreen extends StatelessWidget {
         .collection('users')
         .doc(currentUid)
         .get();
-    final friendsList = List<String>.from(userDoc.data()?['friends'] ?? []);
+
+    final data = userDoc.data();
+    final friendsList = data != null && data['friends'] is List
+        ? List<String>.from(data['friends'])
+        : <String>[];
 
     if (friendsList.isEmpty) return [];
 
     final usersQuery = await FirebaseFirestore.instance
         .collection('users')
-        .where(FieldPath.documentId, whereIn: friendsList)
+        .where(FieldPath.documentId, whereIn: friendsList.length > 10 ? friendsList.sublist(0, 10) : friendsList)
         .get();
 
     return usersQuery.docs.map((doc) {
@@ -55,12 +59,10 @@ class FriendsScreen extends StatelessWidget {
               final friend = friends[index];
               return ListTile(
                 leading: CircleAvatar(
-                  backgroundImage: friend['photoUrl'] != null &&
-                          friend['photoUrl'].toString().isNotEmpty
+                  backgroundImage: friend['photoUrl'] != null && friend['photoUrl'].toString().isNotEmpty
                       ? NetworkImage(friend['photoUrl'])
                       : null,
-                  child: (friend['photoUrl'] == null ||
-                          friend['photoUrl'].toString().isEmpty)
+                  child: (friend['photoUrl'] == null || friend['photoUrl'].toString().isEmpty)
                       ? const Icon(Icons.person)
                       : null,
                 ),

@@ -9,72 +9,48 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'friend_requests_screen.dart';
 import 'notifications_screen.dart';
+import 'friends_screen.dart';
 
-class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
+class MainNavigationScreen extends StatefulWidget {
+  const MainNavigationScreen({super.key});
 
   @override
-  State<MainNavigation> createState() => _MainNavigationState();
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
-class _MainNavigationState extends State<MainNavigation> {
+class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
-  // Ajusta estos valores según tu lógica
-  final String selectedMyTeamId = '';
-  final String selectedMyTeamName = '';
-
-  List<Widget> get _screens => [
-        MatchesScreen(
-          tuEquipoId: selectedMyTeamId,
-          tuEquipoName: selectedMyTeamName,
-        ),
-        TeamsScreen(),
-        SearchUserScreen(),
-        ProfileScreen(profileUid: FirebaseAuth.instance.currentUser!.uid),
-      ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  final List<Widget> _screens = [
+    ProfileScreen(),
+    FriendsScreen(),
+    MatchesScreen(),
+    TeamsScreen(),
+    SearchUserScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Fútbol App'),
-        automaticallyImplyLeading: false, // Quita la flecha de volver
-        actions: [
-          notificationsBadgeIcon(context),
-        ],
       ),
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.sports_soccer),
-            label: 'Partidos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.groups),
-            label: 'Equipos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Buscar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
-        ],
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
         type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
+          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Amigos'),
+          BottomNavigationBarItem(icon: Icon(Icons.sports_soccer), label: 'Partidos'),
+          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Equipos'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
+        ],
       ),
     );
   }

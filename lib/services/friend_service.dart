@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -6,12 +8,12 @@ class FriendService {
     final currentUid = FirebaseAuth.instance.currentUser?.uid;
     if (currentUid == null || currentUid == toUid) return;
 
-    // Verifica que no exista ya una solicitud pendiente
+    // Verifica que no exista ya una solicitud pendiente en ambos sentidos
     final existing = await FirebaseFirestore.instance
         .collection('friend_requests')
-        .where('from', isEqualTo: currentUid)
-        .where('to', isEqualTo: toUid)
         .where('status', isEqualTo: 'pending')
+        .where('from', whereIn: [currentUid, toUid])
+        .where('to', whereIn: [currentUid, toUid])
         .get();
 
     if (existing.docs.isEmpty) {
@@ -22,7 +24,7 @@ class FriendService {
         'timestamp': FieldValue.serverTimestamp(),
       });
     } else {
-      throw Exception('Ya existe una solicitud pendiente');
+      throw Exception('ya enviaste una solicitud de amistad');
     }
   }
 

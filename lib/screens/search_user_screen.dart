@@ -22,7 +22,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
   @override
   void initState() {
     super.initState();
-    // saveFcmToken(); // Eliminado porque ya no se usa FCM asasdsadasdsa
+    // saveFcmToken(); // Eliminado porque ya no se usa FCM asasdsadadsadsdsa
   }
 
   Future<void> _searchUser() async {
@@ -94,7 +94,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text(
-                                        'Ya existe una solicitud pendiente')),
+                                        'ya enviaste una solicitud de amistad')),
                               );
                             }
                           },

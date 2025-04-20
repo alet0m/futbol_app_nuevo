@@ -11,7 +11,6 @@ dependencies:
   flutter:
     sdk: flutter
   firebase_core: ^3.13.0
-  firebase_messaging: ^15.2.5
   firebase_auth: ^5.5.2
   cloud_firestore: ^5.6.6
   google_fonts: ^6.2.1
@@ -26,17 +25,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/to/resolution-aware-images
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/to/asset-from-package
-  # You can add your assets here if you have any (like images, etc.)
-
-  # Example to add custom fonts (if you plan to use custom fonts)
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
